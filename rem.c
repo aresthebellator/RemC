@@ -31,9 +31,9 @@
 void show_rem()
 {
   printf(YELLOW "HOW TO USE: \n" RESET);
-  printf("  ./rem" CYAN " add " RESET "\"title\" \"command\" -> THIS FUNCTION ADDS A NEW REM\n");
-  printf("  ./rem" CYAN " list " RESET  "-> THIS FUNCTION SHOWS ALL REMS\n");
-  printf("  ./rem" CYAN " find " RESET "\"title\"  -> FINDS A SPECIFIC REM\n");
+  printf("  rem" CYAN " add " RESET "\"title\" \"command\" -> THIS FUNCTION ADDS A NEW REM\n");
+  printf("  rem" CYAN " list " RESET  "-> THIS FUNCTION SHOWS ALL REMS\n");
+  printf("  rem" CYAN " find " RESET "\"title\"  -> FINDS A SPECIFIC REM\n");
 }
 
 int main(int argc, char *argv[])
