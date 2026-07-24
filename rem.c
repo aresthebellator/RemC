@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FILE_NAME "RemC.txt"
+
 #define MAX_L 1024
 #define RESET "\033[0m"
 #define CYAN "\033[1;36m"
@@ -38,6 +38,18 @@ void show_rem()
 
 int main(int argc, char *argv[])
 {
+  char file_path[MAX_L];
+  const char *home_dir = getenv("HOME");
+  if(home_dir == NULL)
+  {
+    home_dir = getenv("USERPROFILE");
+    if(home_dir == NULL)
+    {
+      printf(RED "ERROR: Cannot determine the Home directory.\n" RESET);
+    }
+  }
+  snprintf(file_path,sizeof(file_path),"%s/%s",home_dir,"RemC.txt");
+
   if(argc < 2)
   {
     show_rem();
@@ -53,7 +65,7 @@ int main(int argc, char *argv[])
       return 1;
     }
     
-    FILE *file = fopen(FILE_NAME, "a");
+    FILE *file = fopen(file_path, "a");
     if(file == NULL)
     {
       printf(RED "Error opening file.\n" RESET);
@@ -66,7 +78,7 @@ int main(int argc, char *argv[])
   
   else if(strcmp(argv[1], "list") == 0)
   {
-    FILE *file = fopen(FILE_NAME, "r");
+    FILE *file = fopen(file_path, "r");
     if(file == NULL)
     {
       printf(RED "No REM saved, or file does not exist.\n" RESET);
@@ -90,7 +102,7 @@ int main(int argc, char *argv[])
       return 1;
     }
     
-    FILE *file = fopen(FILE_NAME, "r");
+    FILE *file = fopen(file_path, "r");
     if(file == NULL)
     {
       printf(RED "No REM saved, or file does not exist.\n" RESET);

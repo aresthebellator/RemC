@@ -8,18 +8,18 @@ Built in pure C with zero external dependencies, it boasts a near-zero memory fo
 git clone [https://github.com/aresthebellator/RemC.git](https://github.com/aresthebellator/RemC.git)
 cd RemC
 gcc rem.c -o rem
-./rem
+sudo mv rem /usr/local/bin/
 ```
 
 ##EXAMPLE TO USE
 
 ```bash
 #add new rem
-./rem add "launch-ollama" "ollama run"
-./rem add "system update in Ubuntu" "sudo apt upgrade"
+rem add "launch-ollama" "ollama run"
+rem add "system update in Ubuntu" "sudo apt upgrade"
 
 #how to see all the rem
-./rem list
+rem list
 
 #search for a specific rem
-./rem find "ollama"
+rem find "ollama"
