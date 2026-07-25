@@ -30,10 +30,12 @@
 
 void show_rem()
 {
-  printf(YELLOW "HOW TO USE: \n" RESET);
+  printf("\n");
+  printf(YELLOW " HOW TO USE: \n" RESET);
   printf("  rem" CYAN " add " RESET "\"title\" \"command\" -> THIS FUNCTION ADDS A NEW REM\n");
   printf("  rem" CYAN " list " RESET  "-> THIS FUNCTION SHOWS ALL REMS\n");
   printf("  rem" CYAN " find " RESET "\"title\"  -> FINDS A SPECIFIC REM\n");
+  printf("  rem" CYAN " help " RESET "--> SHOW THE PATH WHERE YOU CAN EDIT THE TXT FILE\n");
 }
 
 int main(int argc, char *argv[])
@@ -129,6 +131,21 @@ int main(int argc, char *argv[])
     }
     
     fclose(file);
+  }
+  
+  else if(strcmp(argv[1],"help") == 0)
+  {
+    const char *home = getenv("HOME");
+    if(home == NULL)
+    {
+      printf(RED "ERROR: I cannot find the Home directory.\n" RESET);
+      return 1;
+    }
+    char full_path[512];
+    const char *file_name = "RemC.txt";
+    snprintf(full_path,sizeof(full_path),"%s/%s",home, file_name);
+    printf("PATH: %s\n",full_path);
+    return 0;
   }
   
   else
