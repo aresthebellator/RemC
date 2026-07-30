@@ -36,12 +36,14 @@ void show_rem()
   printf("  rem" CYAN " list " RESET  "-> THIS FUNCTION SHOWS ALL REMS\n");
   printf("  rem" CYAN " find " RESET "\"title\"  -> FINDS A SPECIFIC REM\n");
   printf("  rem" CYAN " help " RESET "--> SHOW THE PATH WHERE YOU CAN EDIT THE TXT FILE\n");
+  printf("  rem" CYAN " edit " RESET "\"search_term\" \"new_title\" \"new_cmd\" --> EDIT A REM\n");
+  printf("  rem" CYAN " remove " RESET "--> REMOVE A REM\n");
 }
 
 int main(int argc, char *argv[])
 {
   char file_path[MAX_L];
-  const char *home_dir = getenv("HOME");
+    const char *home_dir = getenv("HOME");
   if(home_dir == NULL)
   {
     home_dir = getenv("USERPROFILE");
@@ -148,6 +150,115 @@ int main(int argc, char *argv[])
     return 0;
   }
   
+  else if(strcmp(argv[1],"edit") == 0)
+  {
+    if(argc != 5)
+    {
+      printf(RED "ERROR: YOU NEED TO PROVIDE SEARCH TERM, NEW TITLE AND NEW COMMAND.\n" RESET);
+      printf(YELLOW "HOW TO USE: rem edit \"search_term\" \"new_title\" \"new_command\"\n" RESET);
+      return 1;
+    } 
+    char temp_path[MAX_L];
+    snprintf(temp_path,sizeof(temp_path),"%s/%s",home_dir,"RemC_temp.txt");
+    FILE *file = fopen(file_path,"r");
+    if(file == NULL)
+    {
+      printf(RED "NO REM SAVED, OR FILE DOES NOT EXIST.\n" RESET);
+      return 1;
+    }
+    FILE *temp = fopen(temp_path,"w");
+    if(temp == NULL)
+    {
+      printf(RED "Error creating temporary file.\n" RESET);
+      fclose(file);
+      return 1;
+    }
+    char line[MAX_L];
+    int f = 0;
+    char *search_term = argv[2];
+    char *new_title = argv[3];
+    char *new_command = argv[4];
+    while(fgets(line,sizeof(line),file) != NULL)
+    {
+      if(!f && strstr(line,search_term) != NULL)
+      {
+        fprintf(temp,"%s | %s\n",new_title,new_command);
+        f = 1;
+      }
+      else
+      {
+        fputs(line,temp);
+      }
+    }
+    fclose(file);
+    fclose(temp);
+    if(f)
+    {
+      remove(file_path);
+      rename(temp_path,file_path);
+      printf(YELLOW "REM EDITED SUCCESSFULLY\n" RESET);
+    }
+    else
+    {
+      remove(temp_path);
+      printf(RED "NO MATCHING REM FOUND TO EDIT.\n"RESET);
+    }
+  }
+  
+  else if(strcmp(argv[1],"remove") == 0)
+  {
+    if(argc != 3)
+    {
+      printf(RED "ERROR: YOU NEED TO PROVIDE THE SEARCH TERM TO REMOVE.\n" RESET);
+      printf(YELLOW "USAGE: rem remove \"search_term\"\"\n" RESET);
+      return 1;
+    }
+    
+    char temp_path[MAX_L];
+    snprintf(temp_path,sizeof(temp_path),"%s/%s",home_dir,"RemC_temp.txt");
+    FILE *file = fopen(file_path,"r");
+    if(file == NULL)
+    {
+      printf(RED "NO REM SAVED, OR FILE DOES NOT EXIST.\n" RESET);
+      return 1;
+    }
+    FILE *temp = fopen(temp_path,"w");
+    if(temp == NULL)
+    {
+      printf(RED "Error creating temporary file.\n" RESET);
+      fclose(file);
+      return 1;
+    }
+
+    char line[MAX_L];
+    int removed = 0;
+    char *r_command = argv[2];
+    while(fgets(line,sizeof(line),file) != NULL)
+    {
+      if(strstr(line,r_command) == NULL)
+      {
+        fputs(line,temp);
+      }
+      else
+      {
+          removed++;
+      }
+    }
+    fclose(file);
+    fclose(temp);
+    if(removed > 0)
+    {
+      remove(file_path);
+      rename(temp_path,file_path);
+      printf(YELLOW "REM EDITED SUCCESSFULLY\n" RESET);
+    }
+    else
+    {
+      remove(temp_path);
+      printf(RED "NO MATCHING REM FOUND TO REMOVE. \n" RESET);
+    }
+  }
+
   else
   {
     printf(RED "Error: Command not found: %s\n" RESET, argv[1]);
