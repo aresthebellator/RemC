@@ -23,3 +23,10 @@ rem list
 
 #search for a specific rem
 rem find "ollama"
+
+#edit the rem file
+rem edit "search_term" "new_title" "new_command"
+
+#remove rem in the file
+
+rem remove ex: " Creation new dir"
